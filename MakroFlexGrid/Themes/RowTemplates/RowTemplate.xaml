@@ -1,0 +1,268 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MakroFlexGrid.Converters"
+    xmlns:frozen="clr-namespace:MakroFlexGrid.FrozenSeparators"
+    xmlns:rows="clr-namespace:MakroFlexGrid.Rows"
+    xmlns:scroll="clr-namespace:MakroFlexGrid.Scroll">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Converters.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/DefaultCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/SystemCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/EditableCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/ComboBoxCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/UnifiedCellTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="RowTemplate">
+        <Grid Width="{Binding RowWidth}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="RowCellsGrid" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="LeftColDef" Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition x:Name="CenterColDef" Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition x:Name="RightColDef" Width="Auto  " />
+                </Grid.ColumnDefinitions>
+
+                <!--  Left Frozen Section  -->
+                <Border Grid.Column="0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{Binding RowBackground}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectedBackground}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <ItemsControl ItemsSource="{Binding LeftCells}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="{Binding Width}" SnapsToDevicePixels="True">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="{Binding RowViewModel.GridLineBrush}" />
+                                            <Setter Property="BorderThickness" Value="0,0,1,1" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCellSelected}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{Binding RowViewModel.CellSelectedBorderBrush}" />
+                                                    <Setter Property="BorderThickness" Value="{Binding RowViewModel.CellSelectedBorderThickness}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <ContentControl VerticalAlignment="Stretch" Content="{Binding}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ., Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type rows:SystemCellViewModel}}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource SystemCellTemplate}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                    </DataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding ., Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type rows:SystemCellViewModel}}" Value="False" />
+                                                            <Condition Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+                <!--  Left Row Separator  -->
+                <frozen:RowSeparatorGripper Grid.Column="1" Width="{Binding SeparatorWidth}" VerticalAlignment="Stretch" Background="{Binding SeparatorBrush}" IsRight="False">
+                    <frozen:RowSeparatorGripper.Visibility>
+                        <MultiBinding Converter="{StaticResource FrozenSeparatorVisibilityConverter}">
+                            <Binding Path="SeparatorWidth" />
+                            <Binding Path="LeftFrozenColumnsCount" />
+                        </MultiBinding>
+                    </frozen:RowSeparatorGripper.Visibility>
+                </frozen:RowSeparatorGripper>
+
+                <!--  Center Scrollable Section  -->
+                <Grid Grid.Column="2" ClipToBounds="True" SnapsToDevicePixels="True" UseLayoutRounding="True">
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="{Binding RowBackground}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="Background" Value="{Binding RowSelectedBackground}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding CenterCells}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel scroll:ScrollBehavior.HorizontalOffset="{Binding HorizontalOffset, Converter={StaticResource NegativeValueConverter}, Mode=OneWay}" Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="{Binding Width}" SnapsToDevicePixels="True">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="BorderBrush" Value="{Binding RowViewModel.GridLineBrush}" />
+                                                    <Setter Property="BorderThickness" Value="0,0,1,1" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCellSelected}" Value="True">
+                                                            <Setter Property="BorderBrush" Value="{Binding RowViewModel.CellSelectedBorderBrush}" />
+                                                            <Setter Property="BorderThickness" Value="{Binding RowViewModel.CellSelectedBorderThickness}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <ContentControl VerticalAlignment="Stretch" Content="{Binding}">
+                                                <ContentControl.Style>
+                                                    <Style TargetType="ContentControl">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                                <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                            </DataTrigger>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False" />
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!--  Right Row Separator  -->
+                <frozen:RowSeparatorGripper Grid.Column="3" Width="{Binding SeparatorWidth}" VerticalAlignment="Stretch" Background="{Binding SeparatorBrush}" IsRight="True">
+                    <frozen:RowSeparatorGripper.Visibility>
+                        <MultiBinding Converter="{StaticResource FrozenSeparatorVisibilityConverter}">
+                            <Binding Path="SeparatorWidth" />
+                            <Binding Path="RightFrozenColumnsCount" />
+                        </MultiBinding>
+                    </frozen:RowSeparatorGripper.Visibility>
+                </frozen:RowSeparatorGripper>
+
+                <!--  Right Frozen Section  -->
+                <Border Grid.Column="4">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{Binding RowBackground}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="Background" Value="{Binding RowSelectedBackground}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <ItemsControl ItemsSource="{Binding RightCells}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="{Binding Width}" SnapsToDevicePixels="True">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="{Binding RowViewModel.GridLineBrush}" />
+                                            <Setter Property="BorderThickness" Value="{Binding IsLeftmostInRightPanel, Converter={StaticResource BoolToLeftBorderConverter}}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCellSelected}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{Binding RowViewModel.CellSelectedBorderBrush}" />
+                                                    <Setter Property="BorderThickness" Value="{Binding RowViewModel.CellSelectedBorderThickness}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <ContentControl VerticalAlignment="Stretch" Content="{Binding}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                    </DataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False" />
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1" HorizontalAlignment="Left" Padding="6,3,6,4" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" BorderBrush="{Binding GridLineBrush}" BorderThickness="0,0,0,1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="{Binding RowBackground}" />
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RowDetailsTemplate, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="Background" Value="{Binding RowSelectedBackground}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid ClipToBounds="True">
+                    <ContentControl HorizontalAlignment="Left" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" Content="{Binding Item}" ContentTemplate="{Binding RowDetailsTemplate}" scroll:ScrollBehavior.HorizontalOffset="{Binding HorizontalOffset, Converter={StaticResource NegativeValueConverter}, Mode=OneWay}" />
+                </Grid>
+            </Border>
+
+            <!--  BottomRowTemplate Section (Row 2)  -->
+            <Border Grid.Row="2" HorizontalAlignment="Left" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" BorderBrush="{Binding GridLineBrush}" BorderThickness="0,0,0,1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding BottomRowTemplate, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid ClipToBounds="True">
+                    <ContentControl HorizontalAlignment="Left" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" Content="{Binding Item}" ContentTemplate="{Binding BottomRowTemplate}" scroll:ScrollBehavior.HorizontalOffset="{Binding HorizontalOffset, Converter={StaticResource NegativeValueConverter}, Mode=OneWay}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

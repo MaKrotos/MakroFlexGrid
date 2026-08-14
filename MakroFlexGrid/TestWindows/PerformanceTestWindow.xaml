@@ -1,0 +1,460 @@
+﻿<Window
+    x:Class="MakroFlexGrid.TestWindows.PerformanceTestWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:TestWindows="clr-namespace:MakroFlexGrid.TestWindows"
+    xmlns:core="clr-namespace:MakroFlexGrid.Core"
+    xmlns:headers="clr-namespace:MakroFlexGrid.Headers"
+    xmlns:rows="clr-namespace:MakroFlexGrid.Rows"
+    xmlns:sorting="clr-namespace:MakroFlexGrid.Sorting"
+    Title="Performance Test - CustomDataGrid (All Cell Types)"
+    Width="1400"
+    Height="800"
+    Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!--  ================================================================  -->
+        <!--  BOTTOM CELL TEMPLATES (для панели итогов)  -->
+        <!--  ================================================================  -->
+
+        <!--  Для числовых значений в BottomPanel: сумма с форматированием  -->
+        <DataTemplate x:Key="NumberBottomCellTemplate">
+            <Border
+                Margin="1,0"
+                Background="#FFF5F5F5"
+                BorderBrush="#FFE0E0E0"
+                BorderThickness="0,0,1,0">
+                <TextBlock
+                    Margin="4,2"
+                    VerticalAlignment="Center"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    Foreground="#FF333333"
+                    Text="{Binding Value, StringFormat={}{0:N0}}" />
+            </Border>
+        </DataTemplate>
+
+        <!--  Для статуса в BottomPanel: просто текст  -->
+        <DataTemplate x:Key="StatusBottomCellTemplate">
+            <TextBlock
+                Margin="4,2"
+                VerticalAlignment="Center"
+                FontSize="11"
+                FontStyle="Italic"
+                Foreground="#FF666666"
+                Text="{Binding Value}" />
+        </DataTemplate>
+
+        <!--  Для даты в BottomPanel  -->
+        <DataTemplate x:Key="DateBottomCellTemplate">
+            <TextBlock
+                Margin="4,2"
+                VerticalAlignment="Center"
+                FontSize="11"
+                Foreground="#FF666666"
+                Text="{Binding Value}" />
+        </DataTemplate>
+
+        <!--  Для булевых в BottomPanel  -->
+        <DataTemplate x:Key="BooleanBottomCellTemplate">
+            <TextBlock
+                Margin="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="{Binding Value}" />
+        </DataTemplate>
+
+        <!--  Для ID в BottomPanel  -->
+        <DataTemplate x:Key="IdBottomCellTemplate">
+            <TextBlock
+                Margin="4,2"
+                VerticalAlignment="Center"
+                FontFamily="Consolas"
+                FontSize="10"
+                Foreground="#FF999999"
+                Text="{Binding Value}" />
+        </DataTemplate>
+
+        <!--  ================================================================  -->
+        <!--  HEADER TEMPLATES  -->
+        <!--  ================================================================  -->
+
+        <!--  HeaderTemplate: заголовок с кнопкой  -->
+        <DataTemplate x:Key="HeaderButtonTemplate">
+            <Button
+                Height="40"
+                Margin="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Background="#FFD700"
+                BorderBrush="#B8860B"
+                Content="{Binding}"
+                FontSize="11"
+                FontWeight="Bold"
+                Foreground="#4A0000" />
+        </DataTemplate>
+
+        <!--  HeaderTemplate: заголовок с цветным фоном  -->
+        <DataTemplate x:Key="HeaderColoredTemplate">
+            <Border Margin="-5,-3" SnapsToDevicePixels="True">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Offset="0.0" Color="#FF6A5ACD" />
+                        <GradientStop Offset="1.0" Color="#FF9370DB" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TextBlock
+                    Margin="5,3"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{Binding}"
+                    TextWrapping="Wrap" />
+            </Border>
+        </DataTemplate>
+
+        <!--  HeaderTemplate для листовых колонок: текст с иконкой  -->
+        <DataTemplate x:Key="HeaderLeafWithIconTemplate">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="#FF228B22"
+                    Text="✓" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Foreground="#FF2E8B57"
+                    Text="{Binding}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Background="Green">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Панель управления  -->
+        <StackPanel
+            Grid.Row="0"
+            Margin="10"
+            Orientation="Horizontal">
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="Button_Click"
+                Content="Load 5 rows" />
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="Load1k_Click"
+                Content="Load 1k rows" />
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="Load10k_Click"
+                Content="Load 10k rows" />
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="Load50k_Click"
+                Content="Load 50k rows" />
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="Clear_Click"
+                Content="Clear" />
+            <Button
+                Margin="5"
+                Padding="10,5"
+                Click="StartScrollTest_Click"
+                Content="Start Scroll Test" />
+            <TextBlock
+                x:Name="StatusText"
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                FontWeight="Bold" />
+            <TextBlock
+                x:Name="FPSText"
+                Margin="20,0,0,0"
+                VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!--  Тестируемый DataGrid  -->
+        <core:CustomDataGrid
+            x:Name="TestGrid"
+            Grid.Row="1"
+            Margin="0,0,50,0"
+            AllowDrag="True"
+            AutoGenerateColumns="False"
+            BottomPanelBackground="Aqua"
+            BottomPanelText="Демонстрация текста через XAML"
+            BottomPanelTextPosition="Bottom"
+            CellSelectedBorderBrush="Red"
+            CellSelectedBorderThickness="1"
+            CenterPanelBackground="Transparent"
+            GridLineBrush="LightGray"
+            IsCellSelectionEnabled="True"
+            IsSystemColumnEnabled="True"
+            LeftFrozenPanelBackground="Blue"
+            PanelTextAlignment="Left"
+            PanelTextPadding="10,5,10,5"
+            RightFrozenPanelBackground="Red"
+            RowBackground="Transparent"
+            RowSelectedBackground="#afedfa"
+            RowSelectionMode="Single"
+            SeparatorWidth="10"
+            ShowBottomCellBorders="False"
+            ShowScrollBarSpacers="True">
+
+            <!--  ============================================================  -->
+            <!--  ЗАМОРОЖЕННЫЕ (ЛЕВЫЕ) — базовые колонки  -->
+            <!--  ============================================================  -->
+            <core:CustomDataGrid.FrozenColumnHeaders>
+                <headers:ColumnHeaderGroup
+                    Width="200"
+                    CanUserSort="False"
+                    Header="Базовые">
+                    <headers:ColumnHeaderLeaf
+                        Width="60"
+                        BottomCellTemplate="{StaticResource IdBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="ID"
+                        SortDataType="Number"
+                        SortMemberPath="Id" />
+                    <headers:ColumnHeaderLeaf
+                        Width="140"
+                        BottomCellTemplate="{StaticResource StatusBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Имя"
+                        SortDataType="Text"
+                        SortMemberPath="Name" />
+                    <headers:EditableColumnHeaderLeaf
+                        Width="150"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Описание (ред.)"
+                        SortDataType="Text"
+                        SortMemberPath="Description" />
+                </headers:ColumnHeaderGroup>
+            </core:CustomDataGrid.FrozenColumnHeaders>
+
+            <!--  ============================================================  -->
+            <!--  СКРОЛЛИРУЕМЫЕ — все 10 новых типов ячеек  -->
+            <!--  ============================================================  -->
+            <core:CustomDataGrid.ScrollableColumnHeaders>
+                <headers:ColumnHeaderGroup
+                    Width="500"
+                    CanUserSort="False"
+                    Header="Новые типы ячеек (10 шт.)">
+
+                    <!--  1. NumericCell: числовое поле с форматированием  -->
+                    <headers:NumericColumnHeaderLeaf
+                        Width="120"
+                        AggregateType="Sum"
+                        BottomCellTemplate="{StaticResource NumberBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        CurrencySymbol="₽"
+                        DecimalPlaces="2"
+                        Header="Цена (Numeric)"
+                        MaxValue="999999"
+                        MinValue="0"
+                        SortDataType="Number"
+                        SortMemberPath="Price" />
+
+                    <!--  2. CheckBoxCell: флажок  -->
+                    <headers:CheckBoxColumnHeaderLeaf
+                        Width="80"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Чек (CheckBox)"
+                        IsThreeState="False"
+                        SortDataType="Text"
+                        SortMemberPath="IsChecked" />
+
+                    <!--  3. DateCell: ячейка с датой  -->
+                    <headers:DateColumnHeaderLeaf
+                        Width="130"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Format="dd.MM.yyyy"
+                        Header="Дата (Date)"
+                        SortDataType="Date"
+                        SortMemberPath="Date" />
+
+                    <!--  4. HyperlinkCell: гиперссылка  -->
+                    <headers:HyperlinkColumnHeaderLeaf
+                        Width="150"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Ссылка (Hyperlink)"
+                        SortDataType="Text"
+                        SortMemberPath="Url" />
+
+                    <!--  5. ProgressCell: полоса прогресса  -->
+                    <headers:ProgressColumnHeaderLeaf
+                        Width="120"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Прогресс (Progress)"
+                        Maximum="100"
+                        Minimum="0"
+                        ShowPercentage="True"
+                        SortDataType="Number"
+                        SortMemberPath="Progress" />
+
+                    <!--  6. ImageCell: изображение  -->
+                    <headers:ImageColumnHeaderLeaf
+                        Width="80"
+                        MaxWidth="60"
+                        MaxHeight="40"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Фото (Image)"
+                        SortDataType="Text"
+                        SortMemberPath="ImageUrl"
+                        Stretch="Uniform" />
+
+                    <!--  7. RatingCell: рейтинг звёздами  -->
+                    <headers:RatingColumnHeaderLeaf
+                        Width="120"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Рейтинг (Rating)"
+                        MaxRating="5"
+                        SortDataType="Number"
+                        SortMemberPath="Rating" />
+
+                    <!--  8. ColorCell: цветной прямоугольник  -->
+                    <headers:ColorColumnHeaderLeaf
+                        Width="100"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Цвет (Color)"
+                        ShowColorName="True"
+                        SortDataType="Text"
+                        SortMemberPath="Color" />
+
+                    <!--  9. MultiLineTextCell: многострочный текст  -->
+                    <headers:MultiLineColumnHeaderLeaf
+                        Width="150"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Многострочный (MultiLine)"
+                        MaxLines="5"
+                        SortDataType="Text"
+                        SortMemberPath="MultiLineText" />
+
+                    <!--  10. RadioButtonCell: радиокнопки  -->
+                    <headers:RadioButtonColumnHeaderLeaf
+                        Width="180"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        GroupName="RadioGroup"
+                        Header="Выбор (RadioButton)"
+                        Options="{Binding Source={x:Static TestWindows:TestItem.RadioOptions}}"
+                        SortDataType="Text"
+                        SortMemberPath="RadioOption" />
+                </headers:ColumnHeaderGroup>
+
+                <!--  Стандартные колонки (DefaultCell, ComboBoxCell)  -->
+                <headers:ColumnHeaderGroup
+                    Width="250"
+                    CanUserSort="False"
+                    Header="Стандартные">
+                    <headers:ColumnHeaderLeaf
+                        Width="100"
+                        AggregateType="Sum"
+                        BottomCellTemplate="{StaticResource NumberBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Значение"
+                        SortDataType="Number"
+                        SortMemberPath="Value" />
+                    <headers:ColumnHeaderLeaf
+                        Width="80"
+                        BottomCellTemplate="{StaticResource BooleanBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Активен"
+                        SortDataType="Text"
+                        SortMemberPath="IsActive" />
+                    <headers:ComboBoxColumnHeaderLeaf
+                        Width="120"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        DisplayMemberPath="."
+                        Header="Категория (Combo)"
+                        HeaderTemplate="{StaticResource HeaderLeafWithIconTemplate}"
+                        ItemsSource="{Binding Source={x:Static TestWindows:TestItem.Categories}}"
+                        SelectedValueBinding="Category"
+                        SelectedValuePath="."
+                        SortDataType="Text"
+                        SortMemberPath="Category" />
+                </headers:ColumnHeaderGroup>
+            </core:CustomDataGrid.ScrollableColumnHeaders>
+
+            <!--  ============================================================  -->
+            <!--  ЗАМОРОЖЕННЫЕ (ПРАВЫЕ) — статус и дата  -->
+            <!--  ============================================================  -->
+            <core:CustomDataGrid.RightFrozenColumnHeaders>
+                <headers:ColumnHeaderGroup
+                    Width="180"
+                    AllowCrossSectionDrag="False"
+                    CanUserSort="False"
+                    Header="Сводка"
+                    HeaderTemplate="{StaticResource HeaderColoredTemplate}">
+                    <headers:ColumnHeaderLeaf
+                        Width="100"
+                        BottomCellTemplate="{StaticResource StatusBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Статус"
+                        HeaderTemplate="{StaticResource HeaderLeafWithIconTemplate}"
+                        SortDataType="Text"
+                        SortMemberPath="Status" />
+                    <headers:ColumnHeaderLeaf
+                        Width="80"
+                        BottomCellTemplate="{StaticResource DateBottomCellTemplate}"
+                        CanUserFilter="True"
+                        CanUserSort="True"
+                        Header="Дата"
+                        HeaderTemplate="{StaticResource HeaderLeafWithIconTemplate}"
+                        SortDataType="Date"
+                        SortMemberPath="Date" />
+                </headers:ColumnHeaderGroup>
+            </core:CustomDataGrid.RightFrozenColumnHeaders>
+
+            <core:CustomDataGrid.PanelTextTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="DarkBlue"
+                        Text="{Binding}" />
+                </DataTemplate>
+            </core:CustomDataGrid.PanelTextTemplate>
+        </core:CustomDataGrid>
+
+        <!--  Панель метрик  -->
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock x:Name="MemoryText" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="TimeText" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="RowCountText" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

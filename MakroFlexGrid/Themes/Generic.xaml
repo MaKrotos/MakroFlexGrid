@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Converters.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Grippers.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Headers.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/GridControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

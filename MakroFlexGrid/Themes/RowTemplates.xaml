@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Converters.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/DefaultCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/EditableCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/ComboBoxCellTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/RowTemplate.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/BottomRowTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

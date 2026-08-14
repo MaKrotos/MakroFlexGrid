@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ms-xsd="urn:schemas-microsoft-com:xsd-ms-compat">
+  <xsd:schema id="root" xmlns="" element="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" type="root" />
+    <xsd:complexType name="root">
+      <xsd:sequence>
+        <xsd:element name="data" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="value" type="xsd:string" minOccurs="0" />
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="xml:space" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="resheader" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="value" type="xsd:string" minOccurs="0" />
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:schema>
+  <resheader name="stringResources" extends="global">
+    <value>Свойства ресурсов</value>
+  </resheader>
+  <resheader name="duration">
+    <value>10.0</value>
+  </resheader>
+  <resheader name="win32">
+    <value>Microsoft ® Windows ® Corporation. All rights reserved.</value>
+  </resheader>
+  <resheader name="compiler">
+    <value>mstcecw.exe</value>
+  </resheader>
+  <resheader name="resmanager">
+    <value>ResMgr.exe</value>
+  </resheader>
+  <resheader name="version">
+    <value>4.0.30319.42000.2</value>
+  </resheader>
+  <resheader name="toolbarstring">
+    <value>%%AssemblyApplicationResources.dll</value>
+  </resheader>
+  <resheader name="AssemblyName">
+    <value>MakroFlexGrid</value>
+  </resheader>
+  <data name="HideGroup" xml:space="preserve">Скрыть группу</data>
+  <data name="ColumnVisibility" xml:space="preserve">Видимость колонок</data>
+  <data name="FrozenLeft" xml:space="preserve">Замороженные (левые):</data>
+  <data name="MainColumns" xml:space="preserve">Основные:</data>
+  <data name="FrozenRight" xml:space="preserve">Замороженные (правые):</data>
+  <data name="NoName" xml:space="preserve">(без имени)</data>
+  <data name="NoTitle" xml:space="preserve">Без названия</data>
+  <data name="LastColumnError" xml:space="preserve">Нельзя скрыть последнюю видимую колонку!</data>
+  <data name="NoAggregate" xml:space="preserve">Без итога</data>
+  <data name="Sum" xml:space="preserve">Сумма</data>
+  <data name="Average" xml:space="preserve">Среднее</data>
+  <data name="Count" xml:space="preserve">Количество</data>
+  <data name="Min" xml:space="preserve">Минимум</data>
+  <data name="Max" xml:space="preserve">Максимум</data>
+  <data name="Empty" xml:space="preserve">(пусто)</data>
+  <data name="Filter" xml:space="preserve">Фильтр</data>
+  <data name="FilterClear" xml:space="preserve">Сбросить фильтр</data>
+  <data name="FilterClearAll" xml:space="preserve">Сбросить все фильтры</data>
+  <data name="FilterEquals" xml:space="preserve">Равно</data>
+  <data name="FilterNotEquals" xml:space="preserve">Не равно</data>
+  <data name="FilterContains" xml:space="preserve">Содержит</data>
+  <data name="FilterStartsWith" xml:space="preserve">Начинается с</data>
+  <data name="FilterEndsWith" xml:space="preserve">Заканчивается на</data>
+  <data name="FilterGreaterThan" xml:space="preserve">Больше</data>
+  <data name="FilterLessThan" xml:space="preserve">Меньше</data>
+  <data name="FilterBetween" xml:space="preserve">От... до</data>
+  <data name="FilterFrom" xml:space="preserve">От:</data>
+  <data name="FilterTo" xml:space="preserve">До:</data>
+  <data name="FilterApply" xml:space="preserve">Применить</data>
+  <data name="FilterSelectAll" xml:space="preserve">Выбрать все</data>
+  <data name="FilterSearchPlaceholder" xml:space="preserve">Поиск...</data>
+</root>

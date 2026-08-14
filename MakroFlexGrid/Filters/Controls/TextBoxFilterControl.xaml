@@ -1,0 +1,64 @@
+<UserControl x:Class="MakroFlexGrid.Filters.Controls.TextBoxFilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MakroFlexGrid.Filters.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="250"
+             MinWidth="200" MaxWidth="300">
+    <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+            BorderThickness="1"
+            Padding="8">
+        <StackPanel>
+            <!-- Заголовок с названием колонки -->
+            <TextBlock x:Name="HeaderText"
+                       FontWeight="Bold"
+                       Margin="0,0,0,6"
+                       TextTrimming="CharacterEllipsis" />
+
+            <!-- Выбор оператора -->
+            <ComboBox x:Name="OperatorCombo"
+                      Margin="0,0,0,6"
+                      SelectedIndex="0" />
+
+            <!-- Текстовое поле поиска -->
+            <TextBox x:Name="SearchTextBox"
+                     Margin="0,0,0,6"
+                     TextChanged="OnSearchTextChanged" />
+
+            <!-- Список уникальных значений с CheckBox -->
+            <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                    BorderThickness="1"
+                    MaxHeight="200">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="ValuesList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding DisplayValue}"
+                                          IsChecked="{Binding IsSelected}"
+                                          Margin="2,1"
+                                          Checked="OnValueChecked"
+                                          Unchecked="OnValueUnchecked" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Кнопки действий -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,6,0,0">
+                <Button x:Name="ApplyButton"
+                        Click="OnApplyClick"
+                        Padding="8,2"
+                        Margin="0,0,4,0" />
+                <Button x:Name="ClearButton"
+                        Click="OnClearClick"
+                        Padding="8,2" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

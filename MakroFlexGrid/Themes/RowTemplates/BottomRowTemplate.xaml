@@ -1,0 +1,271 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MakroFlexGrid.Converters"
+    xmlns:scroll="clr-namespace:MakroFlexGrid.Scroll">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Converters.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/RowTemplates/DefaultCellTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <converters:PanelTextPositionToRowConverter x:Key="PanelTextPositionToRowConverter" />
+
+    <DataTemplate x:Key="BottomRowTemplate">
+        <Grid
+            x:Name="MainGrid"
+            Width="{Binding RowWidth}"
+            HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition x:Name="CenterColDef" Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition x:Name="RightColDef" Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Left Frozen Section  -->
+            <Border
+                x:Name="LeftSectionBorder"
+                Grid.Row="{Binding TextPosition, Converter={StaticResource PanelTextPositionToRowConverter}}"
+                Grid.Column="0"
+                Background="{Binding BottomPanelBackground}"
+                BorderBrush="{Binding GridLineBrush}"
+                BorderThickness="0,1,0,0"
+                ClipToBounds="True"
+                SnapsToDevicePixels="True">
+                <Grid>
+                    <ItemsControl VerticalAlignment="Stretch" ItemsSource="{Binding LeftCells}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Width="{Binding Width}"
+                                    BorderBrush="{Binding GridLineBrush}"
+                                    SnapsToDevicePixels="True">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderThickness" Value="0,0,1,0" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.ShowBottomCellBorders, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Value="False">
+                                                    <Setter Property="BorderThickness" Value="0" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <ContentControl
+                                        VerticalAlignment="Stretch"
+                                        Content="{Binding}"
+                                        ContentTemplate="{Binding Template}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                        <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Canvas
+                        ClipToBounds="True"
+                        IsHitTestVisible="False"
+                        Visibility="{Binding PanelText, Converter={StaticResource VisibilityConverter}, ConverterParameter=Invert}">
+                        <ContentControl
+                            Canvas.Left="{Binding PanelTextPadding.Left}"
+                            Canvas.Top="{Binding PanelTextPadding.Top}"
+                            Width="{Binding ElementName=LeftSectionBorder, Path=ActualWidth}"
+                            HorizontalContentAlignment="{Binding PanelTextAlignment}"
+                            Content="{Binding PanelText}"
+                            ContentTemplate="{Binding PanelTextTemplate}">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PanelTextTemplate, Converter={StaticResource NullToBoolConverter}}" Value="False">
+                                            <Setter Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <TextBlock
+                                                            HorizontalAlignment="{Binding PanelTextAlignment}"
+                                                            Text="{Binding PanelText}"
+                                                            TextTrimming="CharacterEllipsis" />
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+                    </Canvas>
+                </Grid>
+            </Border>
+
+            <!--  Left Separator  -->
+            <Border
+                Grid.Row="{Binding TextPosition, Converter={StaticResource PanelTextPositionToRowConverter}}"
+                Grid.Column="1"
+                Width="{Binding SeparatorWidth}"
+                Background="{Binding SeparatorBrush}"
+                SnapsToDevicePixels="True">
+                <Border.Visibility>
+                    <MultiBinding Converter="{StaticResource FrozenSeparatorVisibilityConverter}">
+                        <Binding Path="SeparatorWidth" />
+                        <Binding Path="LeftFrozenColumnsCount" />
+                    </MultiBinding>
+                </Border.Visibility>
+            </Border>
+
+            <!--  Center Scrollable Section  -->
+            <Grid
+                Grid.Row="{Binding TextPosition, Converter={StaticResource PanelTextPositionToRowConverter}}"
+                Grid.Column="2"
+                ClipToBounds="True"
+                SnapsToDevicePixels="True"
+                UseLayoutRounding="True">
+                <Border
+                    Background="{Binding BottomPanelBackground}"
+                    BorderBrush="{Binding GridLineBrush}"
+                    BorderThickness="0,1,0,0"
+                    SnapsToDevicePixels="True">
+                    <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+                        <ItemsControl
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            ItemsSource="{Binding CenterCells}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        VerticalAlignment="Stretch"
+                                        scroll:ScrollBehavior.HorizontalOffset="{Binding HorizontalOffset, Converter={StaticResource NegativeValueConverter}, Mode=OneWay}"
+                                        Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Width="{Binding Width}"
+                                        BorderBrush="{Binding GridLineBrush}"
+                                        SnapsToDevicePixels="True">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="BorderThickness" Value="0,0,1,0" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.ShowBottomCellBorders, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Value="False">
+                                                        <Setter Property="BorderThickness" Value="0" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <ContentControl
+                                            VerticalAlignment="Stretch"
+                                            Content="{Binding}"
+                                            ContentTemplate="{Binding Template}">
+                                            <ContentControl.Style>
+                                                <Style TargetType="ContentControl">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                            <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!--  Right Separator  -->
+            <Border
+                Grid.Row="{Binding TextPosition, Converter={StaticResource PanelTextPositionToRowConverter}}"
+                Grid.Column="3"
+                Width="{Binding SeparatorWidth}"
+                Background="{Binding SeparatorBrush}"
+                SnapsToDevicePixels="True">
+                <Border.Visibility>
+                    <MultiBinding Converter="{StaticResource FrozenSeparatorVisibilityConverter}">
+                        <Binding Path="SeparatorWidth" />
+                        <Binding Path="RightFrozenColumnsCount" />
+                    </MultiBinding>
+                </Border.Visibility>
+            </Border>
+
+            <!--  Right Frozen Section  -->
+            <Border
+                Grid.Row="{Binding TextPosition, Converter={StaticResource PanelTextPositionToRowConverter}}"
+                Grid.Column="4"
+                Background="{Binding BottomPanelBackground}"
+                BorderBrush="{Binding GridLineBrush}"
+                BorderThickness="0,1,0,0"
+                SnapsToDevicePixels="True">
+                <ItemsControl VerticalAlignment="Stretch" ItemsSource="{Binding RightCells}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Width="{Binding Width}"
+                                BorderBrush="{Binding GridLineBrush}"
+                                SnapsToDevicePixels="True">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderThickness" Value="{Binding IsLeftmostInRightPanel, Converter={StaticResource BoolToLeftBorderConverter}, ConverterParameter=Bottom}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataContext.ShowBottomCellBorders, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Value="False">
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentControl
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding}"
+                                    ContentTemplate="{Binding Template}">
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                    <Setter Property="ContentTemplate" Value="{Binding Template}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Template, Converter={StaticResource NullToBoolConverter}}" Value="False">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellTemplate}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

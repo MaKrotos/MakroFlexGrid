@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ms-xsd="urn:schemas-microsoft-com:xsd-ms-compat">
+  <xsd:schema id="root" xmlns="" element="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" type="root" />
+    <xsd:complexType name="root">
+      <xsd:sequence>
+        <xsd:element name="data" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="value" type="xsd:string" minOccurs="0" />
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="xml:space" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="resheader" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="value" type="xsd:string" minOccurs="0" />
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:schema>
+  <resheader name="stringResources" extends="global">
+    <value>Resource Properties</value>
+  </resheader>
+  <resheader name="duration">
+    <value>10.0</value>
+  </resheader>
+  <resheader name="win32">
+    <value>Microsoft ® Windows ® Corporation. All rights reserved.</value>
+  </resheader>
+  <resheader name="compiler">
+    <value>mstcecw.exe</value>
+  </resheader>
+  <resheader name="resmanager">
+    <value>ResMgr.exe</value>
+  </resheader>
+  <resheader name="version">
+    <value>4.0.30319.42000.2</value>
+  </resheader>
+  <resheader name="toolbarstring">
+    <value>%%AssemblyApplicationResources.dll</value>
+  </resheader>
+  <resheader name="AssemblyName">
+    <value>MakroFlexGrid</value>
+  </resheader>
+  <data name="HideGroup" xml:space="preserve">Hide Group</data>
+  <data name="ColumnVisibility" xml:space="preserve">Column Visibility</data>
+  <data name="FrozenLeft" xml:space="preserve">Frozen (Left):</data>
+  <data name="MainColumns" xml:space="preserve">Main:</data>
+  <data name="FrozenRight" xml:space="preserve">Frozen (Right):</data>
+  <data name="NoName" xml:space="preserve">(no name)</data>
+  <data name="NoTitle" xml:space="preserve">No title</data>
+  <data name="LastColumnError" xml:space="preserve">Cannot hide the last visible column!</data>
+  <data name="NoAggregate" xml:space="preserve">No total</data>
+  <data name="Sum" xml:space="preserve">Sum</data>
+  <data name="Average" xml:space="preserve">Average</data>
+  <data name="Count" xml:space="preserve">Count</data>
+  <data name="Min" xml:space="preserve">Minimum</data>
+  <data name="Max" xml:space="preserve">Maximum</data>
+  <data name="Empty" xml:space="preserve">(empty)</data>
+  <data name="Filter" xml:space="preserve">Filter</data>
+  <data name="FilterClear" xml:space="preserve">Clear Filter</data>
+  <data name="FilterClearAll" xml:space="preserve">Clear All Filters</data>
+  <data name="FilterEquals" xml:space="preserve">Equals</data>
+  <data name="FilterNotEquals" xml:space="preserve">Not Equals</data>
+  <data name="FilterContains" xml:space="preserve">Contains</data>
+  <data name="FilterStartsWith" xml:space="preserve">Starts With</data>
+  <data name="FilterEndsWith" xml:space="preserve">Ends With</data>
+  <data name="FilterGreaterThan" xml:space="preserve">Greater Than</data>
+  <data name="FilterLessThan" xml:space="preserve">Less Than</data>
+  <data name="FilterBetween" xml:space="preserve">Between</data>
+  <data name="FilterFrom" xml:space="preserve">From:</data>
+  <data name="FilterTo" xml:space="preserve">To:</data>
+  <data name="FilterApply" xml:space="preserve">Apply</data>
+  <data name="FilterSelectAll" xml:space="preserve">Select All</data>
+  <data name="FilterSearchPlaceholder" xml:space="preserve">Search...</data>
+</root>

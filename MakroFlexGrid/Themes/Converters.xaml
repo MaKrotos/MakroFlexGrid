@@ -1,0 +1,27 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MakroFlexGrid.Converters">
+
+    <converters:RightFrozenVisibilityConverter x:Key="RightFrozenVisibilityConverter" />
+    <converters:DoubleToVisibilityConverter x:Key="DoubleToVisibilityConverter" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:NegativeValueConverter x:Key="NegativeValueConverter" />
+    <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+    <converters:BoolToLeftBorderConverter x:Key="BoolToLeftBorderConverter" />
+    <converters:VisibilityConverter x:Key="VisibilityConverter" />
+    <converters:TypeMatchConverter x:Key="TypeMatchConverter" />
+
+    <!-- New converters for cell types -->
+    <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+    <converters:StringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+    <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
+    <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
+    <converters:IntToMinHeightConverter x:Key="IntToMinHeightConverter" />
+    <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
+    <converters:EqualityConverter x:Key="EqualityConverter" />
+
+    <!-- Converter for frozen separator visibility (checks both SeparatorWidth and frozen column count) -->
+    <converters:FrozenSeparatorVisibilityConverter x:Key="FrozenSeparatorVisibilityConverter" />
+
+</ResourceDictionary>

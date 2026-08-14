@@ -1,0 +1,470 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MakroFlexGrid.Converters"
+    xmlns:rows="clr-namespace:MakroFlexGrid.Rows">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MakroFlexGrid;component/Themes/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- 
+    Универсальный шаблон ячейки.
+    Выбирает визуальное представление на основе CellViewModel.CellType.
+    Позволяет добавлять новые типы ячеек без изменения RowTemplate.xaml.
+    
+    Как добавить новый тип:
+    1. Создать DataTemplate с x:Key="{CellTypeName}CellView"
+    2. Зарегистрировать в CellBehaviorBase обработчики (если нужно)
+    3. Добавить DataTrigger в UnifiedCellTemplate
+    4. ColumnHeaderLeaf с [CellTemplate("UnifiedCellTemplate")] будет использовать этот шаблон
+    -->
+
+    <!-- ============================================ -->
+    <!-- Default: простой TextBlock                   -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="DefaultCellView">
+        <TextBlock
+            Padding="4,0,4,0"
+            VerticalAlignment="Center"
+            Text="{Binding Value}"
+            TextWrapping="Wrap" />
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Editable: TextBlock/TextBox с переключением  -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="EditableCellView">
+        <Grid
+            VerticalAlignment="Stretch"
+            rows:CellBehaviorBase.IsEnabled="True"
+            Background="Transparent">
+
+            <!-- TextBlock (режим просмотра) -->
+            <TextBlock
+                x:Name="DisplayText"
+                Padding="4,0,4,0"
+                VerticalAlignment="Center"
+                IsHitTestVisible="True"
+                Text="{Binding Value}"
+                TextWrapping="NoWrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- TextBox (режим редактирования) -->
+            <TextBox
+                x:Name="EditBox"
+                Margin="4"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                BorderThickness="1"
+                Text="{Binding EditValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- ComboBox: выпадающий список                  -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="ComboBoxCellView">
+        <ComboBox
+            x:Name="CellComboBox"
+            VerticalAlignment="Center"
+            Margin="2,0"
+            BorderThickness="1"
+            rows:CellBehaviorBase.IsEnabled="True" />
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Numeric: числовое поле с форматированием     -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="NumericCellView">
+        <Grid
+            VerticalAlignment="Stretch"
+            rows:EditableCellBehavior.IsEnabled="True"
+            Background="Transparent">
+
+            <!-- TextBlock (режим просмотра) -->
+            <TextBlock
+                x:Name="DisplayText"
+                Padding="4,0,4,0"
+                VerticalAlignment="Center"
+                IsHitTestVisible="True"
+                Text="{Binding Value}"
+                TextWrapping="NoWrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- TextBox (режим редактирования) -->
+            <TextBox
+                x:Name="EditBox"
+                Margin="4"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Center"
+                BorderThickness="1"
+                Text="{Binding EditValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                rows:CellBehaviorBase.IsEnabled="True"
+                rows:CellBehaviorBase.CellType="Numeric">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- CheckBox: флажок                             -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="CheckBoxCellView">
+        <CheckBox
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            IsChecked="{Binding Value, Converter={StaticResource StringToBoolConverter}, Mode=OneWay}"
+            IsThreeState="{Binding Config[IsThreeState]}" />
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Date: ячейка с датой                         -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="DateCellView">
+        <Grid
+            VerticalAlignment="Stretch"
+            rows:EditableCellBehavior.IsEnabled="True"
+            Background="Transparent">
+
+            <!-- TextBlock (режим просмотра) -->
+            <TextBlock
+                x:Name="DisplayDate"
+                Padding="4,0,4,0"
+                VerticalAlignment="Center"
+                IsHitTestVisible="True"
+                Text="{Binding Value}"
+                TextWrapping="NoWrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- DatePicker (режим редактирования) -->
+            <DatePicker
+                x:Name="DatePickerControl"
+                VerticalAlignment="Center"
+                Margin="4,0"
+                SelectedDate="{Binding EditValue, Converter={StaticResource StringToDateTimeConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsTodayHighlighted="True">
+                <DatePicker.Style>
+                    <Style TargetType="DatePicker">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DatePicker.Style>
+            </DatePicker>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Hyperlink: гиперссылка                       -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="HyperlinkCellView">
+        <TextBlock VerticalAlignment="Center" Padding="4,0,4,0">
+            <Hyperlink
+                Command="{Binding Config[Command]}"
+                CommandParameter="{Binding Config[CommandParameter]}"
+                NavigateUri="{Binding Value}">
+                <TextBlock
+                    Text="{Binding Value}"
+                    TextDecorations="Underline"
+                    Foreground="Blue" />
+            </Hyperlink>
+        </TextBlock>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Progress: полоса прогресса                   -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="ProgressCellView">
+        <Grid VerticalAlignment="Center" Margin="4,0">
+            <ProgressBar
+                Value="{Binding Value, Converter={StaticResource StringToDoubleConverter}, Mode=OneWay}"
+                Minimum="{Binding Config[Minimum]}"
+                Maximum="{Binding Config[Maximum]}"
+                Height="16" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="{Binding Value}"
+                FontSize="11"
+                Foreground="White">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Config[ShowPercentage]}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Image: изображение                           -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="ImageCellView">
+        <Image
+            Source="{Binding Value, Converter={StaticResource StringToImageSourceConverter}}"
+            Stretch="{Binding Config[Stretch]}"
+            MaxWidth="{Binding Config[MaxWidth]}"
+            MaxHeight="{Binding Config[MaxHeight]}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Margin="2,0" />
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Rating: рейтинг (звёзды)                     -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="RatingCellView">
+        <ItemsControl
+            x:Name="RatingItemsControl"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            rows:CellBehaviorBase.IsEnabled="True"
+            rows:CellBehaviorBase.CellType="Rating">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Content="★"
+                        FontSize="16"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Command="{Binding DataContext.Config[RatingCommand], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Color: цветной прямоугольник + название      -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="ColorCellView">
+        <Grid VerticalAlignment="Center" Margin="2,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Grid.Column="0"
+                Width="16" Height="16"
+                CornerRadius="3"
+                Background="{Binding Value, Converter={StaticResource StringToBrushConverter}}"
+                BorderBrush="Gray"
+                BorderThickness="1"
+                Margin="0,0,4,0" />
+            <TextBlock
+                Grid.Column="1"
+                Text="{Binding Value}"
+                VerticalAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Config[ShowColorName]}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- MultiLine: многострочный текст               -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="MultiLineCellView">
+        <Grid
+            VerticalAlignment="Stretch"
+            rows:EditableCellBehavior.IsEnabled="True"
+            Background="Transparent">
+
+            <!-- TextBlock (режим просмотра) -->
+            <TextBlock
+                x:Name="DisplayText"
+                Padding="4,0,4,0"
+                VerticalAlignment="Center"
+                IsHitTestVisible="True"
+                Text="{Binding Value}"
+                TextWrapping="Wrap"
+                MaxHeight="{Binding Config[MaxLines], Converter={StaticResource IntToMinHeightConverter}}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- TextBox (режим редактирования) -->
+            <TextBox
+                x:Name="EditBox"
+                Margin="4"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Top"
+                BorderThickness="1"
+                Text="{Binding EditValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto"
+                MinHeight="{Binding Config[MaxLines], Converter={StaticResource IntToMinHeightConverter}}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- RadioButton: радиокнопки                     -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="RadioButtonCellView">
+        <ItemsControl
+            ItemsSource="{Binding Config[Options]}"
+            VerticalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton
+                        Content="{Binding}"
+                        GroupName="{Binding DataContext.Config[GroupName], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Margin="2,0">
+                        <RadioButton.IsChecked>
+                            <MultiBinding Converter="{StaticResource EqualityConverter}" Mode="OneWay">
+                                <Binding Path="DataContext.Value" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                                <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </RadioButton.IsChecked>
+                    </RadioButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+
+    <!-- ============================================ -->
+    <!-- Универсальный шаблон, выбирающий по CellType -->
+    <!-- ============================================ -->
+    <DataTemplate x:Key="UnifiedCellTemplate">
+        <ContentControl VerticalAlignment="Stretch" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate" Value="{StaticResource DefaultCellView}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CellType}" Value="Editable">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EditableCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="ComboBox">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ComboBoxCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Numeric">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NumericCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="CheckBox">
+                            <Setter Property="ContentTemplate" Value="{StaticResource CheckBoxCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Date">
+                            <Setter Property="ContentTemplate" Value="{StaticResource DateCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Hyperlink">
+                            <Setter Property="ContentTemplate" Value="{StaticResource HyperlinkCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Progress">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ProgressCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Image">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ImageCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Rating">
+                            <Setter Property="ContentTemplate" Value="{StaticResource RatingCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="Color">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ColorCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="MultiLine">
+                            <Setter Property="ContentTemplate" Value="{StaticResource MultiLineCellView}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CellType}" Value="RadioButton">
+                            <Setter Property="ContentTemplate" Value="{StaticResource RadioButtonCellView}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </DataTemplate>
+
+</ResourceDictionary>

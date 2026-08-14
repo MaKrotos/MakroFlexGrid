@@ -1,0 +1,60 @@
+<UserControl x:Class="MakroFlexGrid.Filters.Controls.DateTimeRangeFilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="260" d:DesignWidth="250"
+             MinWidth="200" MaxWidth="300">
+    <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+            BorderThickness="1"
+            Padding="8">
+        <StackPanel>
+            <!-- Заголовок с названием колонки -->
+            <TextBlock x:Name="HeaderText"
+                       FontWeight="Bold"
+                       Margin="0,0,0,8"
+                       TextTrimming="CharacterEllipsis" />
+
+            <!-- От -->
+            <TextBlock x:Name="FromLabel"
+                       Margin="0,0,0,2" />
+            <DatePicker x:Name="FromDatePicker"
+                        Margin="0,0,0,2"
+                        SelectedDateChanged="OnFromDateChanged" />
+            <TextBox x:Name="FromTimeTextBox" 
+                     Margin="0,0,0,6" 
+                     Text="00:00:00" 
+                     TextAlignment="Right"
+                     Width="80" 
+                     HorizontalAlignment="Left"/>
+
+            <!-- До -->
+            <TextBlock x:Name="ToLabel"
+                       Margin="0,0,0,2" />
+            <DatePicker x:Name="ToDatePicker"
+                        Margin="0,0,0,2"
+                        SelectedDateChanged="OnToDateChanged" />
+            <TextBox x:Name="ToTimeTextBox" 
+                     Margin="0,0,0,6" 
+                     Text="23:59:59" 
+                     TextAlignment="Right"
+                     Width="80" 
+                     HorizontalAlignment="Left"/>
+
+            <!-- Кнопки действий -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,8,0,0">
+                <Button x:Name="ApplyButton"
+                        Click="OnApplyClick"
+                        Padding="8,2"
+                        Margin="0,0,4,0" />
+                <Button x:Name="ClearButton"
+                        Click="OnClearClick"
+                        Padding="8,2" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

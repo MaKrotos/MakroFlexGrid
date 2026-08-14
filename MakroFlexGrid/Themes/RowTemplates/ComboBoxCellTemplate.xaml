@@ -1,0 +1,19 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:rows="clr-namespace:MakroFlexGrid.Rows">
+
+    <!-- 
+    Шаблон для ячейки с выпадающим списком (ComboBox).
+    ItemsSource, DisplayMemberPath, SelectedValuePath берутся из ComboBoxColumnHeaderLeaf
+    через attached behavior ComboBoxCellBehavior.
+    SelectedValue динамически привязывается к свойству Item.
+    -->
+    <DataTemplate x:Key="ComboBoxCellTemplate">
+        <ComboBox x:Name="CellComboBox"
+                  VerticalAlignment="Center"
+                  Margin="2,0"
+                  BorderThickness="1"
+                  rows:ComboBoxCellBehavior.IsEnabled="True" />
+    </DataTemplate>
+</ResourceDictionary>
