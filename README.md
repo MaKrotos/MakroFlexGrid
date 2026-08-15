@@ -4,7 +4,6 @@
 
 <h1 id="english">English</h1>
 
-```
 # MakroFlexGrid
 
 High-performance WPF DataGrid with row virtualization, multi-level headers, filtering, sorting, aggregates and a wide range of cell types.
@@ -1162,7 +1161,6 @@ Detailed documentation is located in [`docs/`](MakroFlexGrid/docs):
 ## 📄 License
 
 The project is distributed under the **MIT** license. See the LICENSE file of the package for details.
-```
 
 <h1 id="russian">Russian</h1>
 
