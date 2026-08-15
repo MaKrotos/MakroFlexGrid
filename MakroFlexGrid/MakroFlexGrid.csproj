@@ -9,7 +9,7 @@
 
     <!-- NuGet packaging -->
     <PackageId>MakroFlexGrid</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>MakroFlexGrid contributors</Authors>
     <Company>MakroFlexGrid</Company>
     <Description>
