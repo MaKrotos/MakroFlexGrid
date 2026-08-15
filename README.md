@@ -2,9 +2,7 @@
 
 ---
 
-<a id="english"></a>
-
-# English
+<h1 id="english">English</h1>
 
 ```
 # MakroFlexGrid
@@ -1166,9 +1164,7 @@ Detailed documentation is located in [`docs/`](MakroFlexGrid/docs):
 The project is distributed under the **MIT** license. See the LICENSE file of the package for details.
 ```
 
-<a id="russian"></a>
-
-# Russian
+<h1 id="russian">Russian</h1>
 
 ---
 
