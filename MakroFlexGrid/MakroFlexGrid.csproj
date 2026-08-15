@@ -9,7 +9,7 @@
 
     <!-- NuGet packaging -->
     <PackageId>MakroFlexGrid</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.0.6</Version>
     <Authors>MakroFlexGrid contributors</Authors>
     <Company>MakroFlexGrid</Company>
     <Description>
@@ -31,8 +31,8 @@
     <NoWarn>$(NoWarn);1591</NoWarn> <!-- подавить предупреждения о недокументированных членах -->
 
     <!-- Assembly metadata -->
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
+    <FileVersion>1.0.6.0</FileVersion>
     <Product>MakroFlexGrid</Product>
     <Copyright>Copyright © 2026 MakroFlexGrid contributors</Copyright>
   </PropertyGroup>
