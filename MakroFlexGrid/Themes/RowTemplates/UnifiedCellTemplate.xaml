@@ -20,13 +20,44 @@
     4. ColumnHeaderLeaf с [CellTemplate("UnifiedCellTemplate")] будет использовать этот шаблон
     -->
 
+    <!--  Аккуратный стиль ProgressBar для ячеек прогресса  -->
+    <Style x:Key="CellProgressBarStyle" TargetType="ProgressBar">
+        <Setter Property="Height" Value="8" />
+        <Setter Property="Foreground" Value="#FF3A6EA5" />
+        <Setter Property="Background" Value="#FFE4E9F0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="4">
+                        <Grid ClipToBounds="True">
+                            <Border
+                                x:Name="PART_Track"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4" />
+                            <Border
+                                x:Name="PART_Indicator"
+                                HorizontalAlignment="Left"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="4" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ============================================ -->
     <!-- Default: простой TextBlock                   -->
     <!-- ============================================ -->
     <DataTemplate x:Key="DefaultCellView">
         <TextBlock
-            Padding="4,0,4,0"
+            Margin="6,2,6,2"
             VerticalAlignment="Center"
+            FontSize="13"
+            Foreground="#FF37474F"
             Text="{Binding Value}"
             TextWrapping="Wrap" />
     </DataTemplate>
@@ -43,8 +74,10 @@
             <!-- TextBlock (режим просмотра) -->
             <TextBlock
                 x:Name="DisplayText"
-                Padding="4,0,4,0"
+                Margin="6,2,6,2"
                 VerticalAlignment="Center"
+                FontSize="13"
+                Foreground="#FF37474F"
                 IsHitTestVisible="True"
                 Text="{Binding Value}"
                 TextWrapping="NoWrap">
@@ -87,8 +120,11 @@
     <DataTemplate x:Key="ComboBoxCellView">
         <ComboBox
             x:Name="CellComboBox"
+            Margin="4,2"
             VerticalAlignment="Center"
-            Margin="2,0"
+            VerticalContentAlignment="Center"
+            Padding="4,2"
+            FontSize="13"
             BorderThickness="1"
             rows:CellBehaviorBase.IsEnabled="True" />
     </DataTemplate>
@@ -102,13 +138,19 @@
             rows:EditableCellBehavior.IsEnabled="True"
             Background="Transparent">
 
-            <!-- TextBlock (режим просмотра) -->
+            <!-- TextBlock (режим просмотра): числа выравниваем вправо -->
             <TextBlock
                 x:Name="DisplayText"
-                Padding="4,0,4,0"
+                Margin="6,2,8,2"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
+                FontSize="13"
+                FontFamily="Consolas"
+                FontWeight="SemiBold"
+                Foreground="#FF2B3A4A"
                 IsHitTestVisible="True"
                 Text="{Binding Value}"
+                TextAlignment="Right"
                 TextWrapping="NoWrap">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
@@ -127,6 +169,8 @@
                 Margin="4"
                 VerticalAlignment="Stretch"
                 VerticalContentAlignment="Center"
+                TextAlignment="Right"
+                FontFamily="Consolas"
                 BorderThickness="1"
                 Text="{Binding EditValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 rows:CellBehaviorBase.IsEnabled="True"
@@ -150,6 +194,7 @@
     <!-- ============================================ -->
     <DataTemplate x:Key="CheckBoxCellView">
         <CheckBox
+            Margin="2"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             IsChecked="{Binding Value, Converter={StaticResource StringToBoolConverter}, Mode=OneWay}"
@@ -168,8 +213,10 @@
             <!-- TextBlock (режим просмотра) -->
             <TextBlock
                 x:Name="DisplayDate"
-                Padding="4,0,4,0"
+                Margin="6,2,6,2"
                 VerticalAlignment="Center"
+                FontSize="13"
+                Foreground="#FF37474F"
                 IsHitTestVisible="True"
                 Text="{Binding Value}"
                 TextWrapping="NoWrap">
@@ -209,7 +256,7 @@
     <!-- Hyperlink: гиперссылка                       -->
     <!-- ============================================ -->
     <DataTemplate x:Key="HyperlinkCellView">
-        <TextBlock VerticalAlignment="Center" Padding="4,0,4,0">
+        <TextBlock VerticalAlignment="Center" Margin="6,2,6,2" FontSize="13">
             <Hyperlink
                 Command="{Binding Config[Command]}"
                 CommandParameter="{Binding Config[CommandParameter]}"
@@ -217,7 +264,7 @@
                 <TextBlock
                     Text="{Binding Value}"
                     TextDecorations="Underline"
-                    Foreground="Blue" />
+                    Foreground="#FF2D6FB0" />
             </Hyperlink>
         </TextBlock>
     </DataTemplate>
@@ -226,18 +273,19 @@
     <!-- Progress: полоса прогресса                   -->
     <!-- ============================================ -->
     <DataTemplate x:Key="ProgressCellView">
-        <Grid VerticalAlignment="Center" Margin="4,0">
+        <Grid VerticalAlignment="Center" Margin="6,2">
             <ProgressBar
+                Style="{StaticResource CellProgressBarStyle}"
                 Value="{Binding Value, Converter={StaticResource StringToDoubleConverter}, Mode=OneWay}"
                 Minimum="{Binding Config[Minimum]}"
-                Maximum="{Binding Config[Maximum]}"
-                Height="16" />
+                Maximum="{Binding Config[Maximum]}" />
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Text="{Binding Value}"
                 FontSize="11"
-                Foreground="White">
+                FontWeight="SemiBold"
+                Foreground="#FF37474F">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -285,9 +333,11 @@
                 <DataTemplate>
                     <Button
                         Content="★"
-                        FontSize="16"
+                        FontSize="17"
+                        Padding="1,0"
                         Background="Transparent"
                         BorderThickness="0"
+                        Foreground="#FFD9A400"
                         Cursor="Hand"
                         Command="{Binding DataContext.Config[RatingCommand], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="{Binding}" />
@@ -308,14 +358,16 @@
             <Border
                 Grid.Column="0"
                 Width="16" Height="16"
-                CornerRadius="3"
+                CornerRadius="4"
                 Background="{Binding Value, Converter={StaticResource StringToBrushConverter}}"
-                BorderBrush="Gray"
+                BorderBrush="#FFC9D2DC"
                 BorderThickness="1"
-                Margin="0,0,4,0" />
+                Margin="0,0,6,0" />
             <TextBlock
                 Grid.Column="1"
                 Text="{Binding Value}"
+                FontSize="13"
+                Foreground="#FF37474F"
                 VerticalAlignment="Center">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
@@ -343,8 +395,10 @@
             <!-- TextBlock (режим просмотра) -->
             <TextBlock
                 x:Name="DisplayText"
-                Padding="4,0,4,0"
+                Margin="6,2,6,2"
                 VerticalAlignment="Center"
+                FontSize="13"
+                Foreground="#FF37474F"
                 IsHitTestVisible="True"
                 Text="{Binding Value}"
                 TextWrapping="Wrap"

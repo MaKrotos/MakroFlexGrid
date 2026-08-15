@@ -4,6 +4,160 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     StartupUri="PerformanceTestWindow.xaml">
     <Application.Resources>
-        <!-- Ресурсы MakroFlexGrid (Generic.xaml и др.) загружаются библиотекой автоматически -->
+        <!--  ================================================================  -->
+        <!--  ОБЩАЯ ПАЛИТРА ПРИМЕРА  -->
+        <!--  Спокойная, профессиональная: приглушённые серо-голубые тона      -->
+        <!--  + один мягкий синий акцент. Без кричащих и неоновых цветов.      -->
+        <!--  ================================================================  -->
+
+        <!--  Фон и поверхности  -->
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#EDF1F5" />
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#F7F9FB" />
+        <SolidColorBrush x:Key="HeaderBarBrush" Color="#FFFFFF" />
+
+        <!--  Границы  -->
+        <SolidColorBrush x:Key="BorderBrush" Color="#DFE5EC" />
+        <SolidColorBrush x:Key="BorderStrongBrush" Color="#C9D2DC" />
+        <SolidColorBrush x:Key="DividerBrush" Color="#E8ECF1" />
+
+        <!--  Текст  -->
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#2D3748" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#5A6B7F" />
+        <SolidColorBrush x:Key="TextMutedBrush" Color="#8A99AC" />
+
+        <!--  Акцент  -->
+        <SolidColorBrush x:Key="AccentBrush" Color="#3A6EA5" />
+        <SolidColorBrush x:Key="AccentDarkBrush" Color="#2E5682" />
+        <SolidColorBrush x:Key="AccentLightBrush" Color="#E3ECF5" />
+
+        <!--  Статусные / итоговые акценты (приглушённые)  -->
+        <SolidColorBrush x:Key="SuccessBrush" Color="#4C8B6B" />
+        <SolidColorBrush x:Key="WarningBrush" Color="#B98A3B" />
+        <SolidColorBrush x:Key="DangerBrush" Color="#B5564E" />
+        <SolidColorBrush x:Key="NeutralBrush" Color="#6C7A8B" />
+
+        <!--  Заголовки колонок и итоги: мягкие пастельные оттенки  -->
+        <SolidColorBrush x:Key="HeaderGroupBrush" Color="#F1F5FA" />
+        <LinearGradientBrush x:Key="HeaderColoredGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Offset="0.0" Color="#5A7EA8" />
+            <GradientStop Offset="1.0" Color="#6F92BB" />
+        </LinearGradientBrush>
+
+        <!--  Шрифт  -->
+        <FontFamily x:Key="AppFontFamily">Segoe UI</FontFamily>
+        <FontFamily x:Key="MonoFontFamily">Consolas</FontFamily>
+
+        <!--  ================================================================  -->
+        <!--  СТИЛЬ КНОПКИ  -->
+        <!--  ================================================================  -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#EEF3F8" />
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BorderStrongBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#E3E9F0" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  Акцентная кнопка (первичное действие)  -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource AccentDarkBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource AccentDarkBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#254664" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  ================================================================  -->
+        <!--  СТИЛЬ ПОЛОСЫ ПРОГРЕССА  -->
+        <!--  ================================================================  -->
+        <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="10" />
+            <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Background" Value="#E4E9F0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="5">
+                            <Grid ClipToBounds="True">
+                                <Border
+                                    x:Name="PART_Track"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="5" />
+                                <Border
+                                    x:Name="PART_Indicator"
+                                    HorizontalAlignment="Left"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="5" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

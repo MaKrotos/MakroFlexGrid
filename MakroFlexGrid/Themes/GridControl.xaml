@@ -79,6 +79,8 @@
 
                                     SeparatorBrush="{TemplateBinding SeparatorBrush}"
                                     SeparatorWidth="{TemplateBinding SeparatorWidth}"
+                                    LeftFrozenColumnsCount="{Binding LeftFrozenColumnsCount, RelativeSource={RelativeSource TemplatedParent}}"
+                                    RightFrozenColumnsCount="{Binding RightFrozenColumnsCount, RelativeSource={RelativeSource TemplatedParent}}"
                                     ShowBottomCellBorders="{TemplateBinding ShowBottomCellBorders}"
                                     BottomPanelHeight="{TemplateBinding BottomPanelHeight}"
                                     Visibility="{Binding HasAggregates, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityConverter}}" />

@@ -31,11 +31,11 @@
                     <ColumnDefinition x:Name="RightColDef" Width="Auto  " />
                 </Grid.ColumnDefinitions>
 
-                <!--  Left Frozen Section  -->
+                <!--  Left Frozen Section (собственный фон для визуального отделения)  -->
                 <Border Grid.Column="0">
                     <Border.Style>
                         <Style TargetType="Border">
-                            <Setter Property="Background" Value="{Binding RowBackground}" />
+                            <Setter Property="Background" Value="{Binding LeftPanelBackground}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                     <Setter Property="Background" Value="{Binding RowSelectedBackground}" />
@@ -170,11 +170,11 @@
                     </frozen:RowSeparatorGripper.Visibility>
                 </frozen:RowSeparatorGripper>
 
-                <!--  Right Frozen Section  -->
+                <!--  Right Frozen Section (собственный фон для визуального отделения)  -->
                 <Border Grid.Column="4">
                     <Border.Style>
                         <Style TargetType="Border">
-                            <Setter Property="Background" Value="{Binding RowBackground}" />
+                            <Setter Property="Background" Value="{Binding RightPanelBackground}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                     <Setter Property="Background" Value="{Binding RowSelectedBackground}" />

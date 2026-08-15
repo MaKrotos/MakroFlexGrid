@@ -91,19 +91,20 @@ namespace MakroFlexGrid.TestWindows
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             TestGrid.ItemsSource = null;
-            StatusText.Text = "Cleared";
+            StatusText.Text = "Таблица очищена";
+            TimeText.Text = "—";
             UpdateMemoryMetrics();
         }
 
         private void StartScrollTest_Click(object sender, RoutedEventArgs e)
         {
-            StatusText.Text = "Scroll test started - scroll vertically and horizontally";
+            StatusText.Text = "Прокручивайте таблицу вертикально и горизонтально";
         }
 
         private void LoadTestData(int rowCount)
         {
             _loadStopwatch = Stopwatch.StartNew();
-            StatusText.Text = $"Generating {rowCount:N0} rows...";
+            StatusText.Text = $"Формирование {rowCount:N0} строк…";
 
             // Генерируем данные в фоновом потоке
             Dispatcher.BeginInvoke(new Action(() =>
@@ -111,7 +112,7 @@ namespace MakroFlexGrid.TestWindows
                 var data = new List<TestItem>();
 
                 var categories = new[] { "Электроника", "Одежда", "Продукты", "Книги", "Игрушки", "Мебель", "Спорт", "Авто" };
-                var statuses = new[] { "Active", "Inactive", "Pending", "Completed", "Cancelled" };
+                var statuses = new[] { "Активен", "Неактивен", "Ожидание", "Завершён", "Отменён" };
                 var rng = new Random(42); // Фиксированный seed для воспроизводимости
 
                 for (int i = 0; i < rowCount; i++)
@@ -119,15 +120,15 @@ namespace MakroFlexGrid.TestWindows
                     var item = new TestItem
                     {
                         Id = i,
-                        Name = $"Item {i}",
-                        Description = $"Description for item {i}. This is a longer text to demonstrate text wrapping and different cell widths.",
+                        Name = $"Элемент {i}",
+                        Description = $"Описание для элемента {i}. Длинный текст для проверки переноса слов и разной ширины колонок.",
                         Value = rng.Next(0, 10000),
                         Status = statuses[i % statuses.Length],
                         Category = categories[i % categories.Length],
                         Date = DateTime.Now.AddDays(-rng.Next(0, 365)),
-                        LastColumn = $"Last column value {i}",
+                        LastColumn = $"Значение последней колонки {i}",
                         IsActive = i % 2 == 0,
-                        // Новые поля для демонстрации всех типов ячеек
+                        // Поля для демонстрации всех типов ячеек
                         Price = (decimal)(rng.NextDouble() * 10000),
                         IsChecked = i % 3 == 0,
                         NullableDate = i % 5 == 0 ? DateTime.Now.AddDays(-rng.Next(0, 365)) : (DateTime?)null,
@@ -136,7 +137,7 @@ namespace MakroFlexGrid.TestWindows
                         ImageUrl = null, // Можно указать URL картинки для теста
                         Rating = rng.Next(1, 6),
                         Color = new[] { "Red", "Green", "Blue", "Orange", "Purple", "Teal" }[i % 6],
-                        MultiLineText = $"Строка 1: Item {i} details\nСтрока 2: Status = {statuses[i % statuses.Length]}\nСтрока 3: Value = {rng.Next(0, 10000)}\nСтрока 4: Category = {categories[i % categories.Length]}",
+                        MultiLineText = $"Строка 1: элемент {i}\nСтрока 2: статус = {statuses[i % statuses.Length]}\nСтрока 3: значение = {rng.Next(0, 10000)}\nСтрока 4: категория = {categories[i % categories.Length]}",
                         RadioOption = new[] { "Вариант А", "Вариант Б", "Вариант В" }[i % 3]
                     };
 
@@ -145,13 +146,14 @@ namespace MakroFlexGrid.TestWindows
                     // Обновляем прогресс каждые 1000 строк
                     if (i % 1000 == 0 && i > 0)
                     {
-                        StatusText.Text = $"Generating... {i:N0}/{rowCount:N0}";
+                        StatusText.Text = $"Формирование… {i:N0}/{rowCount:N0}";
                         Dispatcher.Invoke(() => { }, DispatcherPriority.Background);
                     }
                 }
 
                 _loadStopwatch.Stop();
-                StatusText.Text = $"Loaded {rowCount:N0} rows in {_loadStopwatch.Elapsed.TotalSeconds:F2}s";
+                StatusText.Text = $"Загружено {rowCount:N0} строк за {_loadStopwatch.Elapsed.TotalSeconds:F2} с";
+                TimeText.Text = $"{_loadStopwatch.Elapsed.TotalSeconds:F2} с";
 
                 TestGrid.ItemsSource = data;
                 UpdateMemoryMetrics();

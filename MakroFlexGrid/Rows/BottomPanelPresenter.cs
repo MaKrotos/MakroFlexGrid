@@ -20,19 +20,19 @@ namespace MakroFlexGrid.Rows
 
         public static readonly DependencyProperty LeftFrozenColumnsCountProperty =
             DependencyProperty.Register(nameof(LeftFrozenColumnsCount), typeof(int),
-            typeof(BottomPanelPresenter), new PropertyMetadata(0));
+            typeof(BottomPanelPresenter), new PropertyMetadata(0, OnSeparatorOrFrozenPropertyChanged));
 
         public static readonly DependencyProperty RightFrozenColumnsCountProperty =
             DependencyProperty.Register(nameof(RightFrozenColumnsCount), typeof(int),
-            typeof(BottomPanelPresenter), new PropertyMetadata(0));
+            typeof(BottomPanelPresenter), new PropertyMetadata(0, OnSeparatorOrFrozenPropertyChanged));
 
         public static readonly DependencyProperty SeparatorWidthProperty =
             DependencyProperty.Register(nameof(SeparatorWidth), typeof(double),
-            typeof(BottomPanelPresenter), new PropertyMetadata(0.0));
+            typeof(BottomPanelPresenter), new PropertyMetadata(0.0, OnSeparatorOrFrozenPropertyChanged));
 
         public static readonly DependencyProperty SeparatorBrushProperty =
             DependencyProperty.Register(nameof(SeparatorBrush), typeof(Brush),
-            typeof(BottomPanelPresenter), new PropertyMetadata(Brushes.Gray));
+            typeof(BottomPanelPresenter), new PropertyMetadata(Brushes.Gray, OnSeparatorOrFrozenPropertyChanged));
 
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
@@ -759,6 +759,17 @@ namespace MakroFlexGrid.Rows
         {
             var presenter = (BottomPanelPresenter)d;
             presenter.UpdateAggregates();
+        }
+
+        /// <summary>
+        /// Обработчик изменения свойств, влияющих на отображение разделителей
+        /// и замороженных панелей. Синхронизирует актуальные значения в ViewModel,
+        /// чтобы разделители замороженных зон отображались корректно.
+        /// </summary>
+        private static void OnSeparatorOrFrozenPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var presenter = (BottomPanelPresenter)d;
+            presenter.SyncPropertiesFromGrid();
         }
 
         private static void OnShowBottomCellBordersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

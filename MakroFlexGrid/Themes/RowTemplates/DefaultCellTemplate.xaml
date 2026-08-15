@@ -4,8 +4,10 @@
 
     <DataTemplate x:Key="DefaultCellTemplate">
         <TextBlock
-            Padding="4,0,4,0"
+            Margin="6,2,6,2"
             VerticalAlignment="Center"
+            FontSize="13"
+            Foreground="#FF37474F"
             Text="{Binding Value}"
             TextWrapping="Wrap" />
     </DataTemplate>
