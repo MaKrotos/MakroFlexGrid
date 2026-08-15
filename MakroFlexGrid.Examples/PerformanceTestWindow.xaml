@@ -1,12 +1,12 @@
-﻿<Window
+<Window
     x:Class="MakroFlexGrid.TestWindows.PerformanceTestWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:TestWindows="clr-namespace:MakroFlexGrid.TestWindows"
-    xmlns:core="clr-namespace:MakroFlexGrid.Core"
-    xmlns:headers="clr-namespace:MakroFlexGrid.Headers"
-    xmlns:rows="clr-namespace:MakroFlexGrid.Rows"
-    xmlns:sorting="clr-namespace:MakroFlexGrid.Sorting"
+    xmlns:core="clr-namespace:MakroFlexGrid.Core;assembly=MakroFlexGrid"
+    xmlns:headers="clr-namespace:MakroFlexGrid.Headers;assembly=MakroFlexGrid"
+    xmlns:rows="clr-namespace:MakroFlexGrid.Rows;assembly=MakroFlexGrid"
+    xmlns:sorting="clr-namespace:MakroFlexGrid.Sorting;assembly=MakroFlexGrid"
     Title="Performance Test - CustomDataGrid (All Cell Types)"
     Width="1400"
     Height="800"

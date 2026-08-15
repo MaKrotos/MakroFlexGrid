@@ -1,0 +1,9 @@
+<Application
+    x:Class="MakroFlexGrid.TestWindows.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="PerformanceTestWindow.xaml">
+    <Application.Resources>
+        <!-- Ресурсы MakroFlexGrid (Generic.xaml и др.) загружаются библиотекой автоматически -->
+    </Application.Resources>
+</Application>

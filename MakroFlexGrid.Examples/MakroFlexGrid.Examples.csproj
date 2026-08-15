@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>MakroFlexGrid.Examples</AssemblyName>
+    <RootNamespace>MakroFlexGrid</RootNamespace>
+    <StartupObject>MakroFlexGrid.TestWindows.App</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Ссылка на библиотеку MakroFlexGrid из исходников проекта -->
+    <ProjectReference Include="..\MakroFlexGrid\MakroFlexGrid.csproj" />
+  </ItemGroup>
+
+</Project>

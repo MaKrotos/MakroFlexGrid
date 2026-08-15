@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -6,6 +7,10 @@ using MakroFlexGrid.Rows;
 
 namespace MakroFlexGrid.TestWindows
 {
+    /// <summary>
+    /// Демонстрационное окно MakroFlexGrid: все типы ячеек, замороженные зоны,
+    /// нижняя панель итогов, фильтрация и замер производительности (FPS/память).
+    /// </summary>
     public partial class PerformanceTestWindow : Window
     {
         private DispatcherTimer _fpsTimer;

@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace MakroFlexGrid.TestWindows
 {
+    /// <summary>
+    /// Модель данных для демонстрации всех типов ячеек MakroFlexGrid.
+    /// </summary>
     public class TestItem
     {
         public int Id { get; set; }
