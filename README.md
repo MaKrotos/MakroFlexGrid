@@ -1,4 +1,5 @@
 > **🌍 Язык / Language:** [**English**](#english) · [**Русский**](#russian)
+<img width="1389" height="773" alt="image" src="https://github.com/user-attachments/assets/204ac193-104d-4443-b210-cec05ecbfebd" />
 
 ---
 
