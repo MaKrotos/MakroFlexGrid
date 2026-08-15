@@ -2,6 +2,8 @@
 
 ---
 
+<a id="english"></a>
+
 # English
 
 ```
@@ -1163,6 +1165,8 @@ Detailed documentation is located in [`docs/`](MakroFlexGrid/docs):
 
 The project is distributed under the **MIT** license. See the LICENSE file of the package for details.
 ```
+
+<a id="russian"></a>
 
 # Russian
 
