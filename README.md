@@ -11,7 +11,7 @@ High-performance WPF DataGrid with row virtualization, multi-level headers, filt
 
 `MakroFlexGrid` is built on top of the standard `DataGrid` and is designed for displaying large amounts of data with support for complex hierarchical headers, frozen columns (left and right), multi-level filtering and automatic calculation of aggregates in the bottom panel.
 
-<img width="1389" height="773" alt="MakroFlexGrid" src="https://raw.githubusercontent.com/MaKrotos/MakroFlexGrid/main/preview/image.png" />
+<img width="1389" height="773" alt="MakroFlexGrid" src="https://raw.githubusercontent.com/MaKrotos/MakroFlexGrid/master/preview/image.png" />
 
 
 ## 🚀 Features
@@ -1173,7 +1173,7 @@ The project is distributed under the **MIT** license. See the LICENSE file of th
 
 `MakroFlexGrid` построен поверх стандартного `DataGrid` и предназначен для отображения больших объемов данных с поддержкой сложных иерархических заголовков, замороженных колонок (слева и справа), многоуровневой фильтрации и автоматического расчета агрегатов в нижней панели.
 
-<img width="1389" height="773" alt="MakroFlexGrid" src="https://raw.githubusercontent.com/MaKrotos/MakroFlexGrid/main/preview/image.png" />
+<img width="1389" height="773" alt="MakroFlexGrid" src="https://raw.githubusercontent.com/MaKrotos/MakroFlexGrid/master/preview/image.png" />
 
 
 ## 🚀 Возможности
