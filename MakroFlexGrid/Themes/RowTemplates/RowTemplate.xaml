@@ -260,7 +260,7 @@
                     </Style>
                 </Border.Style>
                 <Grid ClipToBounds="True">
-                    <ContentControl HorizontalAlignment="Left" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" Content="{Binding Item}" ContentTemplate="{Binding BottomRowTemplate}" scroll:ScrollBehavior.HorizontalOffset="{Binding HorizontalOffset, Converter={StaticResource NegativeValueConverter}, Mode=OneWay}" />
+                    <ContentControl HorizontalAlignment="Left" Width="{Binding ElementName=RowCellsGrid, Path=ActualWidth}" Content="{Binding Item}" ContentTemplate="{Binding BottomRowTemplate}" scroll:ScrollBehavior.HorizontalOffset="0" />
                 </Grid>
             </Border>
         </Grid>
