@@ -37,7 +37,7 @@ jobs:
             10.0.x
 
       - name: Restore dependencies
-        run: dotnet restore MakroFlexGrid/MakroFlexGrid.csproj
+        run: dotnet restore MakroFlexGrid.slnx
 
       - name: Build solution (Release)
         run: dotnet build MakroFlexGrid.slnx --configuration Release --no-restore
