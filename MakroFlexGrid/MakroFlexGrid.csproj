@@ -9,7 +9,7 @@
 
     <!-- NuGet packaging -->
     <PackageId>MakroFlexGrid</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <Authors>MakroFlexGrid contributors</Authors>
     <Company>MakroFlexGrid</Company>
     <Description>
@@ -26,18 +26,17 @@
     <RepositoryUrl>https://github.com/MaKrotos/MakroFlexGrid</RepositoryUrl>
     <PackageProjectUrl>https://github.com/MaKrotos/MakroFlexGrid</PackageProjectUrl>
     <PackageReleaseNotes>
-      Документация переорганизована: добавлена папка docs/ с тематическими разделами
-      на английском (docs/en) и русском (docs/ru) языках — overview, reference,
-      customization, data-operations и requirements. Корневой README стал лендингом
-      со ссылками на документацию. Добавлена иконка пакета.
+      Публикация в NuGet Gallery переведена на Trusted Publishing (OIDC)
+      через GitHub Actions. Добавлен рабочий процесс publish-nuget.yml,
+      публикующий пакет при пуше в ветку main.
     </PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn> <!-- подавить предупреждения о недокументированных членах -->
 
     <!-- Assembly metadata -->
-    <AssemblyVersion>1.0.6.0</AssemblyVersion>
-    <FileVersion>1.0.6.0</FileVersion>
+    <AssemblyVersion>1.0.7.0</AssemblyVersion>
+    <FileVersion>1.0.7.0</FileVersion>
     <Product>MakroFlexGrid</Product>
     <Copyright>Copyright © 2026 MakroFlexGrid contributors</Copyright>
   </PropertyGroup>

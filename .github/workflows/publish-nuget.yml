@@ -1,0 +1,56 @@
+name: Publish to NuGet
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'MakroFlexGrid/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'icon.png'
+      - '.github/workflows/publish-nuget.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-publish:
+    name: Build & Publish
+    runs-on: windows-latest
+    # Enable GitHub OIDC token issuance for this job (Trusted Publishing)
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore MakroFlexGrid/MakroFlexGrid.csproj
+
+      - name: Build solution (Release)
+        run: dotnet build MakroFlexGrid.slnx --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: dotnet pack MakroFlexGrid/MakroFlexGrid.csproj --configuration Release --no-build --output ./artifacts
+
+      # Get a short-lived NuGet API key via OIDC (no stored secrets)
+      - name: NuGet login (OIDC -> temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }} # nuget.org profile name (not email)
+
+      - name: Push package to NuGet Gallery
+        run: dotnet nuget push ".\artifacts\*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
