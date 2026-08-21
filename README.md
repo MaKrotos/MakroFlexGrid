@@ -1,7 +1,12 @@
 > **🌍 Language:** [**English**](#english) · [**Русский**](#русский)
-
 ---
 
+[![GitHub Release](https://img.shields.io/github/v/release/MaKrotos/MakroFlexGrid?logo=github)](https://github.com/MaKrotos/MakroFlexGrid/releases)
+[![NuGet Version](https://img.shields.io/nuget/v/MakroFlexGrid?logo=nuget)](https://nuget.org/packages/MakroFlexGrid)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MakroFlexGrid?logo=nuget)](https://nuget.org/packages/MakroFlexGrid)
+[![Target Framework](https://img.shields.io/badge/.NET-8.0_|_9.0_|_10.0-blue?logo=dotnet)](https://microsoft.com)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows)](https://microsoft.com)
+[![License](https://img.shields.io/github/license/MaKrotos/MakroFlexGrid?logo=github)](https://github.com/MaKrotos/MakroFlexGrid/blob/main/LICENSE)
 # English
 
 # MakroFlexGrid
